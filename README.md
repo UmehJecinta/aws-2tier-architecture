@@ -1,6 +1,6 @@
 This project provisions a highly available, scalable and secure 2-tier architecture on AWS using Terraform.
 
-What’s Included
+What’s Included:
 
  •	Networking: VPC, public and private subnets, route tables, Internet Gateway, NAT Gateway
 
@@ -16,15 +16,17 @@ What’s Included
 
  •  User Data: Bootstraps web servers with nginx and a simple website
 
-How to Deploy
+How to Deploy:
 
 Run the following commands inside your Terraform project folder:
 
- •  terraform init      # Initialize Terraform 
- •  terraform plan      # Preview the changes
- •	terraform apply     #Apply the configuration
+ •  terraform init             # Initialize Terraform 
  
-Access the Application
+ •  terraform plan             # Preview the changes
+ 
+ •	terraform apply             #Apply the configuration
+ 
+Access the Application:
 
 After terraform apply, Terraform will output the public ALB DNS name.
 
@@ -39,4 +41,4 @@ Clean Up
 
  When you’re done testing, run:
 
- •  terraform destroy     #To Clean up resources when you’re done testing to avoid charges
+ •  terraform destroy            #To Clean up resources when you’re done testing to avoid charges
