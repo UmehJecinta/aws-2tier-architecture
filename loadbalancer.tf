@@ -4,7 +4,7 @@ resource "aws_security_group" "alb_sg" {
   description = "security group for application load balancer"
   vpc_id      = aws_vpc.aws_vpc.id
 
-ingress {
+  ingress {
     from_port     = 80
     to_port       = 80
     protocol      = "tcp"
@@ -29,10 +29,9 @@ resource "aws_security_group" "webserver_sg" {
   vpc_id      = aws_vpc.aws_vpc.id
 
 ingress {
-    from_port     = 0
-    to_port       = 0
+    from_port     = 80
+    to_port       = 80
     protocol      = "tcp"
-    cidr_blocks   = ["0.0.0.0/0"]
     security_groups  = [aws_security_group.alb_sg.id]
   }
 
@@ -64,20 +63,32 @@ resource "aws_lb_target_group" "alb_tg" {
   port        = "80"
   protocol    = "HTTP"
   vpc_id      = aws_vpc.aws_vpc.id
-  tags = {
+  
+health_check {
+  protocol = "HTTP"
+  path     = "/"
+  port     = "80"
+  }
+
+    tags = {
     Name = "alb_tg"
   }
 }
 
 
-# create listiner for alb
+# create listener for alb
 resource "aws_lb_listener" "alb_listener" {
   load_balancer_arn = aws_lb.aws_alb.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_tg.arn
+    
+    forward {
+      target_group {
+        arn = aws_lb_target_group.alb_tg.arn
+      }
+    }
   }
   tags = {
     Name = "alb_listener"
@@ -95,7 +106,7 @@ ingress {
     from_port     = 80
     to_port       = 80
     protocol      = "tcp"
-    cidr_blocks   = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.webserver_sg.id]
   }
 
 egress {
@@ -111,15 +122,14 @@ egress {
 
 
 resource "aws_security_group" "appserver_sg" {
-  name        = "appserver_sg2"
+  name        = "appserver_sg"
   description = "security group for appserver instance"
   vpc_id      = aws_vpc.aws_vpc.id
 
 ingress {
-    from_port     = 0
-    to_port       = 0
+    from_port     = 80
+    to_port       = 80
     protocol      = "tcp"
-    cidr_blocks   = ["0.0.0.0/0"]
     security_groups = [aws_security_group.alb_sg2.id]
   }
 
@@ -150,20 +160,32 @@ resource "aws_lb_target_group" "alb_tg2" {
   port        = "80"
   protocol    = "HTTP"
   vpc_id      = aws_vpc.aws_vpc.id
+
+  health_check {
+    protocol = "HTTP"
+    path     = "/"
+    port     = "80"
+  }
+
   tags = {
     Name = "alb_tg2"
   }
 }
 
 
-# create listiner for alb
+# create listener for alb
 resource "aws_lb_listener" "alb_listener2" {
   load_balancer_arn = aws_lb.aws_alb2.arn
   port              = "80"
   protocol          = "HTTP"
   default_action {
     type             = "forward"
-    target_group_arn = aws_lb_target_group.alb_tg2.arn
+    
+    forward {
+      target_group {
+        arn = aws_lb_target_group.alb_tg2.arn
+      }
+    }
   }
   tags = {
     Name = "alb_listener2"

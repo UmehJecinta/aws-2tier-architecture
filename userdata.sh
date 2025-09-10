@@ -1,13 +1,16 @@
 #!/bin/bash
-# User data for new EC2 instances
+# User Data for EC2 Instances (Ubuntu with Nginx)
 sudo apt-get update -y
+sudo apt-get upgrade -y
 
-sudo apt-get install -y apache2
+# Install Nginx
+sudo apt-get install -y nginx
 
-sudo systemctl start apache2
+# Start and enable Nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
 
-sudo systemctl enable apache2
-
+# Create a simple index.html
 cat <<EOF > /var/www/html/index.html
 <!DOCTYPE html>
 <html>
@@ -15,13 +18,14 @@ cat <<EOF > /var/www/html/index.html
   <title>My Simple Website</title>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
-    h1 { color: #2E86C1; }
+    h1 { color: #27AE60; }
     p { color: #555; }
   </style>
 </head>
 <body>
   <h1>Welcome to My 2-Tier AWS Architecture</h1>
-  <p>This website is deployed using Terraform, EC2 Auto Scaling, and an Application Load Balancer.</p>
+  <p>This website is deployed using Terraform, EC2 Auto Scaling, and an Application Load Balancer with Nginx.</p>
 </body>
 </html>
 EOF
+

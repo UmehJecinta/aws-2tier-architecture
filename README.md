@@ -14,7 +14,7 @@ What’s Included
 
  •  Security: Security groups for ALBs, web servers, and application servers
 
- •  User Data: Bootstraps web servers with Apache and a sample HTML page
+ •  User Data: Bootstraps web servers with nginx and a simple website
 
 How to Deploy
 
